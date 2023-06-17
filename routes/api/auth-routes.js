@@ -10,6 +10,8 @@ const { validateBody } = require("../../utils/validateBody");
 
 const router = express.Router();
 
+const upload = require("../../middlewares/upload.js");
+
 // signup
 router.post(
   "/register",
@@ -29,5 +31,19 @@ router.get("/current", authenticate, authControllers.getCurrent);
 
 // logout
 router.post("/logout", authenticate, authControllers.logout);
+
+// avatar update
+router.patch(
+  "/avatars",
+  authenticate,
+  upload.single("avatar"),
+  authControllers.avatarUpdate
+);
+
+// verify email
+router.get("/verify/:verificationToken", authControllers.verifyEmail);
+
+// resend verification email
+router.post("/verify", authControllers.resendEmail);
 
 module.exports = router;
